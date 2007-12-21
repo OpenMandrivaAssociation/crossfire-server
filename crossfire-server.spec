@@ -14,6 +14,7 @@ Summary:	Crossfire - a Graphical Adventure Game
 Group:		Games/Adventure
 License:	GPL
 URL:		http://crossfire.real-time.com
+BuildRoot:	%{_tmppath}/%{name}-%{version}-buildroot
 
 Source:		http://prdownloads.sourceforge.net/crossfire/crossfire-%{version}.tar.bz2
 Source1:	%{name}.init.bz2
