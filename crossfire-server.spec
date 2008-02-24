@@ -2,10 +2,10 @@
 # Intentionally don't create logrotate files. If I'm a player,
 # I'll damn any server admin who try to restart game server because
 # of log rotation.
-%define version 1.10.0
+%define version 1.11.0
 %define release %mkrel 1
 
-%define map_version 1.10.0
+%define map_version 1.11.0
 
 Name:		crossfire-server
 Version:	%{version}
@@ -18,7 +18,6 @@ BuildRoot:	%{_tmppath}/%{name}-%{version}-buildroot
 
 Source:		http://prdownloads.sourceforge.net/crossfire/crossfire-%{version}.tar.bz2
 Source1:	%{name}.init.bz2
-#Patch0:		crossfire-1.9.1-autoconf.patch
 Patch2:		crossfire-server-1.7.0-detach.patch
 
 BuildRequires:	png-devel
@@ -57,7 +56,6 @@ This package contains crossedit, a map editor for crossfire.
 
 %prep
 %setup -q -n crossfire-%{version}
-#%patch0
 %patch2 -p1 -b .detach
 
 # cleanup
@@ -91,8 +89,6 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/crossfire/plugins/*a
 # touch log file
 mkdir -p $RPM_BUILD_ROOT/var/log/crossfire
 touch $RPM_BUILD_ROOT/var/log/crossfire/logfile
-
-
 
 %clean
 rm -rf $RPM_BUILD_ROOT
