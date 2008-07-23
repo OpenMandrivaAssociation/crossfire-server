@@ -3,7 +3,7 @@
 # I'll damn any server admin who try to restart game server because
 # of log rotation.
 %define version 1.11.0
-%define release %mkrel 1
+%define release %mkrel 3
 
 %define map_version 1.11.0
 
