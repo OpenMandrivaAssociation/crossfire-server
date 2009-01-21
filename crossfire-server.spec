@@ -18,8 +18,9 @@ BuildRoot:	%{_tmppath}/%{name}-%{version}-buildroot
 
 Source:		http://prdownloads.sourceforge.net/crossfire/crossfire-%{version}.tar.bz2
 Source1:	%{name}.init.bz2
+Patch1:		crossfire-1.11.0-fix-str-fmt.patch
 Patch2:		crossfire-server-1.7.0-detach.patch
-
+Patch3:		crossfire-1.11.0-py2.6.patch
 BuildRequires:	png-devel
 BuildRequires:	xpm-devel
 BuildRequires:	libxaw-devel libxmu-devel libxext-devel libice-devel libxt-devel
@@ -56,13 +57,16 @@ This package contains crossedit, a map editor for crossfire.
 
 %prep
 %setup -q -n crossfire-%{version}
+%patch1 -p0
 %patch2 -p1 -b .detach
+%patch3 -p0
 
 # cleanup
 perl -pi -e 's/\r//g' utils/player_dl.pl.in
 
 %build
 %define _localstatedir /var/lib/games
+sh ./autogen.sh
 %serverbuild
 
 %configure2_5x \
