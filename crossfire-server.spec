@@ -2,7 +2,7 @@
 # Intentionally don't create logrotate files. If I'm a player,
 # I'll damn any server admin who try to restart game server because
 # of log rotation.
-%define version 1.50.0
+%define version 1.60.0
 %define release %mkrel 1
 
 %define map_version 1.50.0
@@ -17,7 +17,7 @@ License:	GPL
 URL:		http://crossfire.real-time.com
 BuildRoot:	%{_tmppath}/%{name}-%{version}-buildroot
 
-Source:		http://prdownloads.sourceforge.net/crossfire/crossfire-%{version}.tar.gz
+Source0:	http://prdownloads.sourceforge.net/crossfire/crossfire-%{version}.tar.gz
 Source1:	%{name}.init
 Patch2:		crossfire-server-1.50.0-detach.patch
 Patch3:		crossfire-server-1.50.0-py2.7.patch
