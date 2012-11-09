@@ -1,0 +1,30 @@
+diff -p -up ./configure.orig ./configure
+--- ./configure.orig	2010-12-03 18:43:36.000000000 +0100
++++ ./configure	2010-12-03 18:45:52.000000000 +0100
+@@ -26775,7 +26775,7 @@ if test "x$cf_have_libdl" = "xyes" ; the
+ 	PY_INCLUDES=""
+ 	dir=""
+ 	if test "x$PYTHON_HOME" != "x"; then
+-		for dir in $PYTHON_HOME/include/python{,2.6,2.5,2.4,3.0,3.1} ; do
++		for dir in $PYTHON_HOME/include/python{,2.7,2.6,2.5,2.4,3.0,3.1} ; do
+ 
+ for ac_header in "$dir/Python.h"
+ do
+@@ -27086,7 +27086,7 @@ fi
+ done
+ 
+ 		if test "x$cf_have_python_h" = "x"  ; then
+-			for dir in  /usr{,/local}/include/python{,2.6,2.5,2.4,3.0,3.1} ; do
++			for dir in  /usr{,/local}/include/python{,2.7,2.6,2.5,2.4,3.0,3.1} ; do
+ 
+ for ac_header in "$dir/Python.h"
+ do
+@@ -27284,7 +27284,7 @@ $as_echo "found in $PYTHON_HOME/lib/$pyt
+ 			fi
+ 
+ 		else
+-			for lib in python{,2.6,2.5,2.4,3.0,3.1} ; do
++			for lib in python{,2.7,2.6,2.5,2.4,3.0,3.1} ; do
+ 				as_ac_Lib=`$as_echo "ac_cv_lib_$lib''_PyArg_ParseTuple" | $as_tr_sh`
+ { $as_echo "$as_me:$LINENO: checking for PyArg_ParseTuple in -l$lib" >&5
+ $as_echo_n "checking for PyArg_ParseTuple in -l$lib... " >&6; }

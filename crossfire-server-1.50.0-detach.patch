@@ -1,0 +1,16 @@
+diff -p -up ./server/daemon.c.detach ./server/daemon.c
+--- ./server/daemon.c.detach	2010-04-26 08:23:34.000000000 +0200
++++ ./server/daemon.c	2010-12-03 18:17:13.000000000 +0100
+@@ -93,9 +93,9 @@ void become_daemon(void) {
+      * Close standard file descriptors and get rid of controlling tty
+      */
+ 
+-    close(0);
+-    close(1);
+-    close(2);
++     fclose (stdin);
++     fclose (stdout);
++     fclose (stderr);
+ 
+     /*
+      * Set up the standard file descriptors.
