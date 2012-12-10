@@ -2,10 +2,10 @@
 # Intentionally don't create logrotate files. If I'm a player,
 # I'll damn any server admin who try to restart game server because
 # of log rotation.
-%define version 1.60.0
+%define version 1.70.0
 %define release %mkrel 1
 
-%define map_version 1.50.0
+%define map_version 1.70.0
 %define _localstatedir /var/lib/games
 
 Name:		crossfire-server
@@ -13,21 +13,18 @@ Version:	%{version}
 Release:	%{release}
 Summary:	Crossfire - a Graphical Adventure Game
 Group:		Games/Adventure
-License:	GPL
+License:	GPLv2
 URL:		http://crossfire.real-time.com
-BuildRoot:	%{_tmppath}/%{name}-%{version}-buildroot
-
 Source0:	http://prdownloads.sourceforge.net/crossfire/crossfire-%{version}.tar.gz
-Source1:	%{name}.init
+Source1:	crossfire-server.service
 Patch2:		crossfire-server-1.50.0-detach.patch
-Patch3:		crossfire-server-1.50.0-py2.7.patch
-BuildRequires:	png-devel
-BuildRequires:	xpm-devel
-BuildRequires:	libxaw-devel libxmu-devel libxext-devel libice-devel libxt-devel
-BuildRequires:	python-devel
+BuildRequires:	pkgconfig(libpng)
+BuildRequires:	pkgconfig(xpm)
+BuildRequires:	libxaw-devel pkgconfig(xmu) pkgconfig(xext) libice-devel pkgconfig(xt)
+BuildRequires:	pkgconfig(python)
 BuildRequires:	flex
 BuildRequires:	tetex-latex
-BuildRequires:	curl-devel
+BuildRequires:	pkgconfig(libcurl)
 Requires(post):		rpm-helper
 Requires(preun):	rpm-helper
 Requires:	crossfire-maps = %{map_version}
@@ -44,10 +41,16 @@ only want to play crossfire, you don't need this package.
 %prep
 %setup -q -n crossfire-%{version}
 %patch2 -p1 -b .detach
-%patch3 -p0 -b .python
 
-# cleanup
-perl -pi -e 's/\r//g' utils/player_dl.pl.in
+sed -i 's#\r##' utils/player_dl.pl.in
+# Don't use a hardcoded /tmp directory for building the image archive
+sed -i "s#^\$TMPDIR=.*#\$TMPDIR=\"`pwd`\";#" lib/adm/collect_images.pl
+# Don't map stdio streams to /
+# This is fixed in CVS, but didn't make it into the 1.9.1 release.
+sed -i 's#    (void) open ("/", O_RDONLY);#    (void) open ("/var/log/crossfire/crossfire.log", O_RDONLY);#' server/daemon.c
+
+# Change the location of the tmp directory
+sed -i "s@^#define TMPDIR \"/tmp\"@#define TMPDIR \"%{_var}/lib/games/%{name}/tmp\"@" include/config.h
 
 %build
 %configure2_5x \
@@ -58,11 +61,9 @@ perl -pi -e 's/\r//g' utils/player_dl.pl.in
 %make
 
 %install
-rm -rf %{buildroot}
 %makeinstall_std
 
-#mkdir -p %{buildroot}%{_initrddir}
-install -Dm0755 %{SOURCE1} %{buildroot}%{_initrddir}/%{name}
+install -pD -m 0755 %{SOURCE1} %{buildroot}%{_unitdir}/%{name}.service
 
 # remove unpackaged files
 rm -f %{buildroot}%{_libdir}/crossfire/{add_throw.perl,mktable.script}
@@ -74,9 +75,6 @@ rm -f %{buildroot}%{_libdir}/crossfire/plugins/*a
 # touch log file
 mkdir -p %{buildroot}%{_logdir}/crossfire
 touch %{buildroot}%{_logdir}/crossfire/logfile
-
-%clean
-rm -rf %{buildroot}
 
 %post
 %create_ghostfile %{_logdir}/crossfire/logfile root games 0664
@@ -91,9 +89,8 @@ rm -rf %{buildroot}
 %_preun_service %{name}
 
 %files
-%defattr(-,root,root)
 %doc AUTHORS ChangeLog DEVELOPERS INSTALL NEWS README TODO
-%config(noreplace) %{_initrddir}/%{name}
+%config(noreplace) %{_unitdir}/%{name}.service
 %config(noreplace) %{_sysconfdir}/crossfire
 %attr(2111,root,games) %{_gamesbindir}/crossfire-server
 %{_gamesbindir}/crossfire-config
