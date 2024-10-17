@@ -14,7 +14,7 @@ Release:	%{release}
 Summary:	Crossfire - a Graphical Adventure Game
 Group:		Games/Adventure
 License:	GPLv2
-URL:		http://crossfire.real-time.com
+URL:		https://crossfire.real-time.com
 Source0:	http://prdownloads.sourceforge.net/crossfire/crossfire-%{version}.tar.gz
 Source1:	crossfire-server.service
 Patch2:		crossfire-server-1.50.0-detach.patch
